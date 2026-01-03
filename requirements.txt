@@ -1,35 +1,22 @@
---extra-index-url https://download.pytorch.org/whl/cpu
-
-# Core backend
 fastapi==0.127.1
 uvicorn==0.40.0
-SQLAlchemy==2.0.45
-pandas==2.3.3
+
 numpy==1.26.4
-python-dotenv
-requests==2.32.5
-
-# Sentiment
-vaderSentiment==3.3.2
-
-# Visualization (optional)
-plotly==6.5.0
-
-# RAG (CPU-only, Python 3.13 compatible)
-sentence-transformers==5.2.0
-transformers==4.36.2
-torch==2.1.2+cpu
 faiss-cpu==1.13.2
 
+torch==2.1.2+cpu
+sentence-transformers==5.2.0
+transformers==4.41.2
 
+SQLAlchemy==2.0.45
+pandas==2.3.3
+requests==2.32.5
+python-dotenv==1.2.1
+vaderSentiment==3.3.2
 
-# Utilities
 scikit-learn==1.8.0
 scipy==1.16.3
-tqdm==4.67.1
 joblib==1.5.3
+tqdm==4.67.1
+
 websocket-client==1.9.0
-
-
-
-
