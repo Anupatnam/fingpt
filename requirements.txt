@@ -12,11 +12,11 @@ requests==2.32.5
 # Sentiment
 vaderSentiment==3.3.2
 
-# Visualization (optional but fine)
+# Visualization (optional)
 plotly==6.5.0
 
-# RAG (CPU-safe)
-torch==2.1.2+cpu
+# RAG (CPU-only, Python 3.13 compatible)
+torch==2.9.1+cpu
 sentence-transformers==2.7.0
 transformers==4.38.2
 faiss-cpu==1.13.2
@@ -26,4 +26,3 @@ scikit-learn==1.8.0
 scipy==1.16.3
 tqdm==4.67.1
 joblib==1.5.3
-
