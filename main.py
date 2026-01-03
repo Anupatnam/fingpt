@@ -1,53 +1,44 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import threading
 
 from src.api.market import router as market_router
 from src.api.investment import router as investment_router
 from src.api.chat import router as chat_router
 
-from src.ingestion.coinbase_ws import start_ws  # 🔥 IMPORTANT
+from src.ingestion.coinbase_ws import start_ws
+from src.processing.aggregator import start_aggregator
 
-# ---------------------------------------------------
-# App init
-# ---------------------------------------------------
 app = FastAPI(
     title="Crypto Sentiment Backend API",
-    description="Market data, investment insights, and RAG-powered crypto analysis",
     version="1.0.0"
 )
 
-# ---------------------------------------------------
-# CORS
-# ---------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # restrict later
-    allow_credentials=True,
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ---------------------------------------------------
-# Routers
-# ---------------------------------------------------
-app.include_router(market_router, prefix="/api/market", tags=["Market"])
-app.include_router(investment_router, prefix="/api/investment", tags=["Investment"])
-app.include_router(chat_router, prefix="/api/chat", tags=["RAG Chat"])
+app.include_router(market_router, prefix="/api/market")
+app.include_router(investment_router, prefix="/api/investment")
+app.include_router(chat_router, prefix="/api/chat")
 
-# ---------------------------------------------------
-# 🔥 START WEBSOCKET ON BOOT
-# ---------------------------------------------------
 @app.on_event("startup")
-def startup_event():
-    print("🚀 Starting Coinbase WebSocket ingestion...")
-    start_ws()
+def startup():
+    print("🚀 Starting ingestion + aggregation")
 
-# ---------------------------------------------------
-# Health check
-# ---------------------------------------------------
+    threading.Thread(
+        target=start_ws,
+        daemon=True
+    ).start()
+
+    threading.Thread(
+        target=start_aggregator,
+        daemon=True
+    ).start()
+
 @app.get("/")
 def root():
-    return {
-        "status": "ok",
-        "message": "Crypto Sentiment Backend + Live Ingestion running"
-    }
+    return {"status": "ok", "message": "Backend live on Railway"}
