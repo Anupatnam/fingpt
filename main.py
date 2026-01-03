@@ -5,6 +5,8 @@ from src.api.market import router as market_router
 from src.api.investment import router as investment_router
 from src.api.chat import router as chat_router
 
+from src.ingestion.coinbase_ws import start_ws  # 🔥 IMPORTANT
+
 # ---------------------------------------------------
 # App init
 # ---------------------------------------------------
@@ -15,7 +17,7 @@ app = FastAPI(
 )
 
 # ---------------------------------------------------
-# CORS (required for frontend)
+# CORS
 # ---------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
@@ -28,23 +30,17 @@ app.add_middleware(
 # ---------------------------------------------------
 # Routers
 # ---------------------------------------------------
-app.include_router(
-    market_router,
-    prefix="/api/market",
-    tags=["Market"]
-)
+app.include_router(market_router, prefix="/api/market", tags=["Market"])
+app.include_router(investment_router, prefix="/api/investment", tags=["Investment"])
+app.include_router(chat_router, prefix="/api/chat", tags=["RAG Chat"])
 
-app.include_router(
-    investment_router,
-    prefix="/api/investment",
-    tags=["Investment"]
-)
-
-app.include_router(
-    chat_router,
-    prefix="/api/chat",
-    tags=["RAG Chat"]
-)
+# ---------------------------------------------------
+# 🔥 START WEBSOCKET ON BOOT
+# ---------------------------------------------------
+@app.on_event("startup")
+def startup_event():
+    print("🚀 Starting Coinbase WebSocket ingestion...")
+    start_ws()
 
 # ---------------------------------------------------
 # Health check
@@ -53,6 +49,5 @@ app.include_router(
 def root():
     return {
         "status": "ok",
-        "message": "Crypto Sentiment Backend is running"
+        "message": "Crypto Sentiment Backend + Live Ingestion running"
     }
-
