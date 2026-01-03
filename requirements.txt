@@ -26,3 +26,5 @@ scikit-learn==1.8.0
 scipy==1.16.3
 tqdm==4.67.1
 joblib==1.5.3
+websocket-client==1.9.0
+
