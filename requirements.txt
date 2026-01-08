@@ -2,7 +2,7 @@ fastapi==0.127.1
 uvicorn==0.40.0
 
 numpy==1.26.4
-faiss-cpu==1.13.2
+faiss-cpu==1.7.4
 
 torch==2.1.2
 sentence-transformers==5.2.0
@@ -20,4 +20,7 @@ joblib==1.5.3
 tqdm==4.67.1
 
 websocket-client==1.9.0
+streamlit
+
+
 
